@@ -11,6 +11,15 @@ app.use(express.json())
 app.use(express.urlencoded({ extended : false }))
 app.use(cookieParser())
 
+app.get('/' , (req , res)=>{
+    res.send('welcome to todist')
+})
+
+app.get('/logout' , (req , res)=>{
+    res.cookie("token" , "")    
+    res.redirect('/user/login')
+})
+
 app.use('/todo' , auth  , require("./routes/todo.routes.js") )
 app.use('/user' , require("./routes/user.routes.js"))
 

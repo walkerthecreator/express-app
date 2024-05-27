@@ -1,0 +1,98 @@
+<%- include('partials/head.ejs')%>
+
+<div class="d-flex align-items-start h-full">
+
+    <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: 100vh;">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+      <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+      <span class="fs-4">Todist</span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item">
+        <a href="#" class="nav-link active" aria-current="page">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+          Home
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-link text-white">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+          Profile
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-link text-white">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+          Todos
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-link text-white">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+          Products
+        </a>
+      </li>
+      <li>
+        <a href="#" class="nav-link text-white">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+          Customers
+        </a>
+      </li>
+    </ul>
+    <hr>
+    <div class="dropdown">
+      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+        <strong>mdo</strong>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+        <li><a class="dropdown-item" href="#">New Todo...</a></li>
+        <li><a class="dropdown-item" href="#">Profile</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+      </ul>
+    </div>
+  </div>
+
+
+
+  <div class="container mt-5">
+    <form class="w-50 container " method="post">
+        <h1 class="text-center my-4">Add New Todos</h1>
+        <div class="mb-3 d-flex gap-1">
+            <input type="text" name="task" class="form-control" id="exampleFormControlInput1" placeholder="Add your Task">
+            <button class="btn btn-danger">Add</button>
+          </div>
+        </form>
+
+<div class="container d-flex flex-wrap gap-2 justify-content-center mt-5">
+
+    <% for(let i of todos) { %>
+        <div class="border p-2 px-3 rounded-3 " style="width: 17rem;">
+            <div class="d-flex justify-content-between">
+                <h1 class="fs-3"><%= i.todo %></h1>
+
+                <div class="dropdown">
+                    <button class="btn " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      ...
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#">Edit</a></li>
+                      <li><a class="dropdown-item bg-danger text-white" href="/todo/delete/<%= i._id %>">Delete</a></li>
+                    </ul>
+                  </div>
+
+
+            </div>
+                <p class="badge <%= i.status ? 'bg-success' : 'bg-warning' %>" >
+                     <%= i.status ? "done" : "pending" %>
+                </p>
+                <h6 class=""><%= i.createdAt.toString().slice(0 , 16 ) %></h6>
+            </div>
+            <% } %>
+        </div>
+</div>
+</div>
+<%- include('partials/body.ejs')%>
+

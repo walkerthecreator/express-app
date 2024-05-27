@@ -65,18 +65,16 @@ async function signup(req , res){
     // { username  } similar to { username : username }
     const userResult = await User.create({ username , email , password : hashedPassword })
 
-    console.log(userResult)
-
     const secretData = { _id : userResult._id ,
         email : userResult.email ,
         username : userResult.username 
       }
 
-    const token = jwt.sign(secretData  , privateKey , { maxAge : 1000 * 60 * 60 * 24 * 2 , http : true } )
+    const token = jwt.sign(secretData  , privateKey)
 
 
-    res.cookie('token' , token )
-    res.json(userResult)
+    res.cookie('token' , token , { maxAge : 1000 * 60 * 60 * 24 * 2 , http : true }  )
+    res.redirect('/todo')
 }
 
 module.exports = { login , signup , getLogin , getSignup }

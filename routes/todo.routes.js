@@ -10,7 +10,7 @@ router.get('/:id' , getSingleTodo)
 
 router.post('/' , addTodo)
 
-router.delete('/:id' , deleteTodo )
+router.get('/delete/:id' , deleteTodo )
 
 
 router.put('/update/:id' , updateTodo  )
