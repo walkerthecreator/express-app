@@ -1,24 +1,31 @@
 const Todo = require("../model/todo.model");
 
 async function getTodos(req , res){
-    const todo = await Todo.find();
-    res.render("todo.ejs" , { todos : todo  })
+    const todo = await Todo.find();   
+    res.render("todo.ejs" , { todos : todo , username : req.user.username  })
 }
 
-// @method GET 
-// @route /todo/:id
 async function getSingleTodo(req , res){
-    const { id } = req.params //1
-    const item = await Todo.findOne({ _id : id })
-    res.json(item)
+    const {id} = req.params
+    const todo = await Todo.findOne({ _id : id })
+    res.render("singleTodo.ejs" , { todo : todo.todo ,
+        status : todo.status ,
+        id : todo._id ,
+        createdAt : todo.createdAt ,
+        updatedAt : todo.updatedAt
+         } )
 }
+
 
 // @method PUT
 // @route /todo/update/:id
 async function updateTodo(req , res){
     const { id } = req.params
     const { task , status } = req.body 
-    let item = await Todo.updateOne({ _id : id  } , { todo : task , status : status })
+    
+    let statusValue = status == 'on' ? true : false ;
+
+    let item = await Todo.updateOne({ _id : id  } , { todo : task , status : statusValue })
     res.redirect('/todo')
 }
 
@@ -35,5 +42,5 @@ async function deleteTodo(req ,res){
 }
 
 module.exports = {
-    getSingleTodo , updateTodo , getTodos , addTodo , deleteTodo 
+    getSingleTodo , updateTodo , getTodos , addTodo , deleteTodo  , getSingleTodo
 }

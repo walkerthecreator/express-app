@@ -13,7 +13,7 @@ router.post('/' , addTodo)
 router.get('/delete/:id' , deleteTodo )
 
 
-router.put('/update/:id' , updateTodo  )
+router.post('/update/:id' , updateTodo  )
 // router.get('/update/:index' , updateTodo )
 
 

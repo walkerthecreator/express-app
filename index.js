@@ -3,6 +3,7 @@ const app = express()
 const db = require("./config/dbconfig.js")
 const cookieParser = require('cookie-parser')
 const auth = require('./middlewares/auth.js')
+const path = require("path")
 
 //  arr = ["nitin" , "aman" , "akshay" , "ronit"]
 app.set("view engine" , "ejs" )
@@ -11,8 +12,14 @@ app.use(express.json())
 app.use(express.urlencoded({ extended : false }))
 app.use(cookieParser())
 
+// absolute path of directory 
+let staticPath = path.join( __dirname , "public" )
+// d:/node/node-start , public . path.join => d:/node/node-start/public 
+
+app.use(express.static(staticPath))
+
 app.get('/' , (req , res)=>{
-    res.send('welcome to todist')
+    res.render('home.ejs')
 })
 
 app.get('/logout' , (req , res)=>{
