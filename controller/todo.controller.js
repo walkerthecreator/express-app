@@ -1,7 +1,7 @@
 const Todo = require("../model/todo.model");
 
 async function getTodos(req , res){
-    const todo = await Todo.find();   
+    const todo = await Todo.find({ user : req.user._id});   
     res.render("todo.ejs" , { todos : todo , username : req.user.username  })
 }
 
@@ -31,7 +31,7 @@ async function updateTodo(req , res){
 
 async function addTodo(req , res){
     const { task } = req.body
-    const todo = await Todo.create({ todo : task })
+    const todo = await Todo.create({ todo : task , user : req.user._id })
     res.redirect('/todo')
 }
 
