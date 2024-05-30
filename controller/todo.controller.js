@@ -11,6 +11,7 @@ async function getSingleTodo(req , res){
     res.render("singleTodo.ejs" , { todo : todo.todo ,
         status : todo.status ,
         id : todo._id ,
+        username : req.user.username ,
         createdAt : todo.createdAt ,
         updatedAt : todo.updatedAt
          } )
@@ -30,9 +31,16 @@ async function updateTodo(req , res){
 }
 
 async function addTodo(req , res){
-    const { task } = req.body
-    const todo = await Todo.create({ todo : task , user : req.user._id })
+    const { task , setPublic } = req.body
+    let isPublic = setPublic == "on" ? true  : false 
+    await Todo.create({ todo : task , user : req.user._id , isPublic : isPublic  })
     res.redirect('/todo')
+}
+
+async function getPublicTodos(req ,res){
+    const todos = await Todo.find({ isPublic : true }).populate("user")
+    console.log(todos)
+    res.render('publicTodos' , { todos : todos , username : req.user.username })
 }
 
 async function deleteTodo(req ,res){
@@ -42,5 +50,6 @@ async function deleteTodo(req ,res){
 }
 
 module.exports = {
-    getSingleTodo , updateTodo , getTodos , addTodo , deleteTodo  , getSingleTodo
+    getSingleTodo , updateTodo , getTodos , addTodo , deleteTodo  , getSingleTodo , 
+    getPublicTodos
 }
