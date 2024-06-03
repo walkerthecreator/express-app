@@ -37,8 +37,12 @@ async function addTodo(req , res){
     res.redirect('/todo')
 }
 
+// todos?pageNumber=2
 async function getPublicTodos(req ,res){
-    const todos = await Todo.find({ isPublic : true }).populate("user")
+    let pageNumber = (req.query.pageNumber) ? req.query.pageNumber : 1 
+    let skipNumber = (pageNumber - 1 ) * 4  
+
+    const todos = await Todo.find({ isPublic : true }).skip(skipNumber).limit(4).populate("user")
     console.log(todos)
     res.render('publicTodos' , { todos : todos , username : req.user.username })
 }
@@ -49,7 +53,21 @@ async function deleteTodo(req ,res){
     res.redirect('/todo')
 }
 
+
+function getSearch(req , res){
+    res.render('search.ejs' , { username : req.user.username , todos : null , query : null })
+} 
+
+async function postSearch(req , res){
+    const { query } = req.body
+    const todos = await Todo.find( { "$and" : [{ isPublic : true } , { "$text" : { "$search" : query }} ]})
+    res.render("search.ejs" , { username : req.user.username ,  todos : todos , query : query })
+}
+
+
 module.exports = {
     getSingleTodo , updateTodo , getTodos , addTodo , deleteTodo  , getSingleTodo , 
-    getPublicTodos
+    getPublicTodos ,
+    postSearch ,
+    getSearch
 }
