@@ -27,6 +27,7 @@ app.get('/logout' , (req , res)=>{
     res.redirect('/user/login')
 })
 
+
 app.use('/todo' , auth , require("./routes/todo.routes.js") )
 app.use('/user' , require("./routes/user.routes.js"))
 

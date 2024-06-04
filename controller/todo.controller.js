@@ -1,4 +1,5 @@
 const Todo = require("../model/todo.model");
+const User = require("../model/user.model");
 
 async function getTodos(req , res){
     const todo = await Todo.find({ user : req.user._id});   
@@ -16,7 +17,6 @@ async function getSingleTodo(req , res){
         updatedAt : todo.updatedAt
          } )
 }
-
 
 // @method PUT
 // @route /todo/update/:id
@@ -60,14 +60,18 @@ function getSearch(req , res){
 
 async function postSearch(req , res){
     const { query } = req.body
+    // "iphone" in "iph"
+    // { "$text" : { "$search" : query ]} }
     const todos = await Todo.find( { "$and" : [{ isPublic : true } , { "$text" : { "$search" : query }} ]})
     res.render("search.ejs" , { username : req.user.username ,  todos : todos , query : query })
 }
+
+
 
 
 module.exports = {
     getSingleTodo , updateTodo , getTodos , addTodo , deleteTodo  , getSingleTodo , 
     getPublicTodos ,
     postSearch ,
-    getSearch
+    getSearch ,
 }

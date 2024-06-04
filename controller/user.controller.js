@@ -1,6 +1,7 @@
 const User = require("../model/user.model")
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const Todo = require("../model/todo.model")
 const privateKey = "mysecrettoken"
 
 
@@ -71,10 +72,14 @@ async function signup(req , res){
       }
 
     const token = jwt.sign(secretData  , privateKey)
-
-
     res.cookie('token' , token , { maxAge : 1000 * 60 * 60 * 24 * 2 , http : true }  )
     res.redirect('/todo')
 }
 
-module.exports = { login , signup , getLogin , getSignup }
+async function getUserProfile(req , res) {
+    const user = await User.findOne({ _id : req.user._id })
+    const todos = await Todo.find({ user : req.user._id  })
+    res.render('profile.ejs' , { user : user , todos : todos  })
+}
+
+module.exports = { login , signup , getLogin , getSignup , getUserProfile }
