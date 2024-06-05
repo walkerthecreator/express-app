@@ -32,6 +32,7 @@ async function updateTodo(req , res){
 
 async function addTodo(req , res){
     const { task , setPublic } = req.body
+    // add validation here setPublic = joi.boolean()
     let isPublic = setPublic == "on" ? true  : false 
     await Todo.create({ todo : task , user : req.user._id , isPublic : isPublic  })
     res.redirect('/todo')

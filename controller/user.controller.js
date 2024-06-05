@@ -2,7 +2,7 @@ const User = require("../model/user.model")
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const Todo = require("../model/todo.model")
-const privateKey = "mysecrettoken"
+const joi = require("joi")
 
 
 function getLogin(req , res){
@@ -24,6 +24,9 @@ function getSignup(req , res){
 
 async function login(req , res){
     const { username  , password } = req.body
+
+    // validate data here 
+
     const user = await User.findOne({username : username})
 
     if(!user){
@@ -40,13 +43,26 @@ async function login(req , res){
         username : user.username 
       }
 
-    const token = jwt.sign(secretData  , privateKey )
+    const token = jwt.sign(secretData  , process.env.JWT_SECRET) 
     res.cookie('token' , token , { maxAge : 1000 * 60 * 60 * 24 * 2 , http : true } )
     res.redirect('/todo')
 }
 
 async function signup(req , res){
     const { username , email , password} = req.body
+
+    // schema for validation check 
+    const userJoiSchema = joi.object({
+        username : joi.string().alphanum().min(3).max(12).required() ,
+        email : joi.string().email().required() ,
+        password : joi.string().min(5).max(18).required()
+    })
+
+    const isValid = userJoiSchema.validate({ username , password , email  }) 
+
+    if(isValid.error){
+        return res.status(400).json({ success : false , error : isValid.error.details[0].message })
+    }
 
     const user = await User.findOne({ username : username })
     const userEmail = await User.findOne({ email: email })
@@ -71,7 +87,7 @@ async function signup(req , res){
         username : userResult.username 
       }
 
-    const token = jwt.sign(secretData  , privateKey)
+    const token = jwt.sign(secretData  , process.env.JWT_SECRET )
     res.cookie('token' , token , { maxAge : 1000 * 60 * 60 * 24 * 2 , http : true }  )
     res.redirect('/todo')
 }

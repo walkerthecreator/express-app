@@ -1,9 +1,13 @@
 const express = require('express')
 const app = express()
+// for reading .env files 
+let dot = require('dotenv').config()
+
 const db = require("./config/dbconfig.js")
 const cookieParser = require('cookie-parser')
 const auth = require('./middlewares/auth.js')
 const path = require("path")
+const port = process.env.PORT || 4000 
 
 //  arr = ["nitin" , "aman" , "akshay" , "ronit"]
 app.set("view engine" , "ejs" )
@@ -27,14 +31,13 @@ app.get('/logout' , (req , res)=>{
     res.redirect('/user/login')
 })
 
-
 app.use('/todo' , auth , require("./routes/todo.routes.js") )
 app.use('/user' , require("./routes/user.routes.js"))
-
 // authenticate / authorization 
 
-
-app.listen( 3000 , ()=>{
+app.listen( port , ()=>{
     console.log('server started at 3000 ')
 } )
-
+// bookmark : [  ]
+// joi.array.items(type : string )
+// age : joi.number().int().positive().max(200)

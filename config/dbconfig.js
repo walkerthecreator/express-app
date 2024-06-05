@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 
-mongoose.connect('mongodb://localhost:27017/todoist')
+const uri = process.env.MONGO_URI
+mongoose.connect(uri)
 
 const db = mongoose.connection
 
